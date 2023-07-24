@@ -10,9 +10,11 @@ import PancakeProtectorBanner from '../PancakeProtectorBanner'
 import FarmV3MigrationBanner from '../FarmV3MigrationBanner'
 import useIsRenderCompetitionBanner from './useIsRenderCompetitionBanner'
 import useIsRenderIfoBanner from './useIsRenderIFOBanner'
+import useIsRenderUserBanner from './useIsRenderUserBanner'
 import TradingRewardBanner from '../TradingRewardBanner'
 import { GalxeTraverseBanner } from '../GalxeTraverseBanner'
 import { PolygonZkEvmBanner } from '../PolygonZkEvmBanner'
+import UserBanner from '../UserBanner'
 
 interface IBannerConfig {
   shouldRender: boolean
@@ -35,9 +37,11 @@ interface IBannerConfig {
 export const useMultipleBannerConfig = () => {
   const isRenderIFOBanner = useIsRenderIfoBanner()
   const isRenderCompetitionBanner = useIsRenderCompetitionBanner()
+  const isRenderUserBanner = useIsRenderUserBanner()
 
   return useMemo(() => {
     const NO_SHUFFLE_BANNERS: IBannerConfig[] = [
+      { shouldRender: isRenderUserBanner, banner: <UserBanner /> },
       { shouldRender: true, banner: <PolygonZkEvmBanner /> },
       { shouldRender: true, banner: <GalxeTraverseBanner /> },
       { shouldRender: true, banner: <PancakeProtectorBanner /> },
@@ -65,5 +69,5 @@ export const useMultipleBannerConfig = () => {
     return [...NO_SHUFFLE_BANNERS, ...shuffle(SHUFFLE_BANNERS)]
       .filter((bannerConfig: IBannerConfig) => bannerConfig.shouldRender)
       .map((bannerConfig: IBannerConfig) => bannerConfig.banner)
-  }, [isRenderIFOBanner, isRenderCompetitionBanner])
+  }, [isRenderIFOBanner, isRenderCompetitionBanner, isRenderUserBanner])
 }
